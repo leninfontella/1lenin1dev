@@ -644,3 +644,18 @@ body {
   }
 }
 /* Fim */
+
+@media (max-width: 768px) {
+  .sobre-imagem {
+    display: flex;
+    justify-content: center;
+  }
+
+  .sobre-imagem img {
+    width: 100%;
+    max-width: 280px;
+    height: auto;
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(0, 216, 255, 0.2);
+  }
+}
