@@ -311,6 +311,7 @@ form {
 }
 
 /* Loader */
+/* Loader container */
 .loader {
   position: fixed;
   top: 0;
@@ -319,38 +320,50 @@ form {
   height: 100%;
   background-color: #0f0f11;
   display: flex;
-  align-items: center;
+  flex-direction: column;
   justify-content: center;
+  align-items: center;
   z-index: 9999;
-  transition: opacity 0.5s ease, visibility 0.5s ease;
+  transition: opacity 0.5s ease;
 }
 
-.loader-text {
-  font-size: 1.5rem;
+/* Quando escondido */
+.loader.escondido {
+  opacity: 0;
+  visibility: hidden;
+}
+
+/* Imagem central (logo ou avatar) */
+.loader-img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 15px;
+  animation: pulse 1.5s infinite;
+}
+
+/* Nome abaixo */
+.loader-nome {
   color: #00d8ff;
-  font-weight: bold;
+  font-size: 1.2rem;
+  font-weight: 500;
   letter-spacing: 1px;
 }
 
-.ponto {
-  animation: pisca 1.2s infinite;
-}
-
-.ponto:nth-child(2) {
-  animation-delay: 0.2s;
-}
-.ponto:nth-child(3) {
-  animation-delay: 0.4s;
-}
-
-@keyframes pisca {
-  0%,
-  20% {
-    opacity: 0;
+/* Animação suave */
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.85;
   }
-  40%,
-  100% {
+  50% {
+    transform: scale(1.1);
     opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0.85;
   }
 }
 
