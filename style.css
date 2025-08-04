@@ -582,3 +582,65 @@ body {
   color: #00d8ff;
   transform: translateY(-4px);
 }
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .container {
+    padding: 20px 16px;
+  }
+
+  .navbar .container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .nav-links {
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+    margin-top: 10px;
+  }
+
+  .hero-content {
+    flex-direction: column;
+    text-align: center;
+    gap: 20px;
+  }
+
+  .hero-avatar img {
+    width: 140px;
+    height: auto;
+  }
+
+  .sobre-container {
+    flex-direction: column-reverse;
+    gap: 30px;
+  }
+
+  .sobre-imagem img {
+    width: 100%;
+    max-width: 300px;
+    display: block;
+    margin: 0 auto;
+  }
+
+  .cards {
+    grid-template-columns: 1fr;
+  }
+
+  .input-group {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .input-group i {
+    margin-bottom: 6px;
+  }
+
+  .footer .social-icons {
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+}
+/* Fim */
