@@ -7,6 +7,15 @@ document
     const nome = document.getElementById("nome").value;
     const email = document.getElementById("email").value;
     const mensagem = document.getElementById("mensagem").value;
+    const statusDiv = document.getElementById("mensagem-status");
+
+    function mostrarMensagem(texto, classe) {
+      statusDiv.textContent = texto;
+      statusDiv.className = `status-mensagem ${classe}`;
+      statusDiv.classList.remove("escondido");
+    }
+
+    mostrarMensagem("Enviando mensagem...", "enviando");
 
     try {
       const resposta = await fetch("http://localhost:3000/enviar-email", {
@@ -17,16 +26,21 @@ document
 
       const resultado = await resposta.json();
 
-      if (resultado.sucesso) {
-        alert("Mensagem enviada com sucesso!");
+      if (resposta.ok) {
+        mostrarMensagem("Mensagem enviada com sucesso! ✅", "sucesso");
         this.reset();
       } else {
-        alert("Erro ao enviar. Tente novamente.");
+        mostrarMensagem("Erro ao enviar. Tente novamente. ❌", "erro");
       }
     } catch (erro) {
       console.error(erro);
-      alert("Erro de conexão.");
+      mostrarMensagem("Erro de conexão. Verifique sua internet. ❌", "erro");
     }
+
+    // Esconde a mensagem depois de 5 segundos
+    setTimeout(() => {
+      statusDiv.classList.add("escondido");
+    }, 5000);
   });
 
 // Scroll suave para seções com links âncora

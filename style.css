@@ -659,3 +659,31 @@ body {
     box-shadow: 0 0 10px rgba(0, 216, 255, 0.2);
   }
 }
+
+.status-mensagem {
+  margin-top: 16px;
+  padding: 12px;
+  border-radius: 6px;
+  font-weight: bold;
+  text-align: center;
+  transition: opacity 0.3s ease;
+}
+
+.status-mensagem.enviando {
+  background-color: #004d7a;
+  color: #fff;
+}
+
+.status-mensagem.sucesso {
+  background-color: #2ecc71;
+  color: #fff;
+}
+
+.status-mensagem.erro {
+  background-color: #e74c3c;
+  color: #fff;
+}
+
+.escondido {
+  display: none;
+}
