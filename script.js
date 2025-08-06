@@ -1,11 +1,33 @@
 // Envio de formulário simulado
-document.getElementById("formContato").addEventListener("submit", function (e) {
-  e.preventDefault();
+document
+  .getElementById("formContato")
+  .addEventListener("submit", async function (e) {
+    e.preventDefault();
 
-  alert("Mensagem enviada com sucesso!");
+    const nome = document.getElementById("nome").value;
+    const email = document.getElementById("email").value;
+    const mensagem = document.getElementById("mensagem").value;
 
-  this.reset(); // limpa os campos
-});
+    try {
+      const resposta = await fetch("http://localhost:3000/enviar-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ nome, email, mensagem }),
+      });
+
+      const resultado = await resposta.json();
+
+      if (resultado.sucesso) {
+        alert("Mensagem enviada com sucesso!");
+        this.reset();
+      } else {
+        alert("Erro ao enviar. Tente novamente.");
+      }
+    } catch (erro) {
+      console.error(erro);
+      alert("Erro de conexão.");
+    }
+  });
 
 // Scroll suave para seções com links âncora
 document.querySelectorAll('a[href^="#"]').forEach((link) => {
