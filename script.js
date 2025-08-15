@@ -18,11 +18,14 @@ document
     mostrarMensagem("Enviando mensagem...", "enviando");
 
     try {
-      const resposta = await fetch("http://localhost:3000/enviar-email", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ nome, email, mensagem }),
-      });
+      const resposta = await fetch(
+        "https://nodemailer-backend-iweb.onrender.com/enviar-email",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ nome, email, mensagem }),
+        }
+      );
 
       const resultado = await resposta.json();
 
