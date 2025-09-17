@@ -77,77 +77,77 @@ const animateNumber = (element, start, end, duration) => {
 // CURSOR PERSONALIZADO
 // ==========================================================================
 
-class CustomCursor {
-  constructor() {
-    this.cursor = document.querySelector(".cursor");
-    this.follower = document.querySelector(".cursor-follower");
-    this.mouseX = 0;
-    this.mouseY = 0;
-    this.cursorX = 0;
-    this.cursorY = 0;
-    this.followerX = 0;
-    this.followerY = 0;
+// class CustomCursor {
+//   constructor() {
+//     this.cursor = document.querySelector(".cursor");
+//     this.follower = document.querySelector(".cursor-follower");
+//     this.mouseX = 0;
+//     this.mouseY = 0;
+//     this.cursorX = 0;
+//     this.cursorY = 0;
+//     this.followerX = 0;
+//     this.followerY = 0;
 
-    this.init();
-  }
+//     this.init();
+//   }
 
-  init() {
-    if (!this.cursor || !this.follower) return;
+//   init() {
+//     if (!this.cursor || !this.follower) return;
 
-    // Event listeners
-    document.addEventListener("mousemove", (e) => {
-      this.mouseX = e.clientX;
-      this.mouseY = e.clientY;
-    });
+//     // Event listeners
+//     document.addEventListener("mousemove", (e) => {
+//       this.mouseX = e.clientX;
+//       this.mouseY = e.clientY;
+//     });
 
-    // Interações especiais
-    document
-      .querySelectorAll("a, button, .btn, .project-card, .skill-item")
-      .forEach((el) => {
-        el.addEventListener("mouseenter", () => this.growCursor());
-        el.addEventListener("mouseleave", () => this.shrinkCursor());
-      });
+//     // Interações especiais
+//     document
+//       .querySelectorAll("a, button, .btn, .project-card, .skill-item")
+//       .forEach((el) => {
+//         el.addEventListener("mouseenter", () => this.growCursor());
+//         el.addEventListener("mouseleave", () => this.shrinkCursor());
+//       });
 
-    this.animate();
-  }
+//     this.animate();
+//   }
 
-  animate() {
-    // Cursor principal (rápido)
-    this.cursorX += (this.mouseX - this.cursorX) * 0.9;
-    this.cursorY += (this.mouseY - this.cursorY) * 0.9;
+//   animate() {
+//     // Cursor principal (rápido)
+//     this.cursorX += (this.mouseX - this.cursorX) * 0.9;
+//     this.cursorY += (this.mouseY - this.cursorY) * 0.9;
 
-    // Cursor follower (lento)
-    this.followerX += (this.mouseX - this.followerX) * 0.1;
-    this.followerY += (this.mouseY - this.followerY) * 0.1;
+//     // Cursor follower (lento)
+//     this.followerX += (this.mouseX - this.followerX) * 0.1;
+//     this.followerY += (this.mouseY - this.followerY) * 0.1;
 
-    if (this.cursor && this.follower) {
-      this.cursor.style.transform = `translate(${this.cursorX}px, ${this.cursorY}px)`;
-      this.follower.style.transform = `translate(${this.followerX}px, ${this.followerY}px)`;
-    }
+//     if (this.cursor && this.follower) {
+//       this.cursor.style.transform = `translate(${this.cursorX}px, ${this.cursorY}px)`;
+//       this.follower.style.transform = `translate(${this.followerX}px, ${this.followerY}px)`;
+//     }
 
-    requestAnimationFrame(() => this.animate());
-  }
+//     requestAnimationFrame(() => this.animate());
+//   }
 
-  growCursor() {
-    if (this.cursor && this.follower) {
-      this.cursor.style.transform += " scale(1.5)";
-      this.follower.style.transform += " scale(1.2)";
-    }
-  }
+//   growCursor() {
+//     if (this.cursor && this.follower) {
+//       this.cursor.style.transform += " scale(1.5)";
+//       this.follower.style.transform += " scale(1.2)";
+//     }
+//   }
 
-  shrinkCursor() {
-    if (this.cursor && this.follower) {
-      this.cursor.style.transform = this.cursor.style.transform.replace(
-        " scale(1.5)",
-        ""
-      );
-      this.follower.style.transform = this.follower.style.transform.replace(
-        " scale(1.2)",
-        ""
-      );
-    }
-  }
-}
+//   shrinkCursor() {
+//     if (this.cursor && this.follower) {
+//       this.cursor.style.transform = this.cursor.style.transform.replace(
+//         " scale(1.5)",
+//         ""
+//       );
+//       this.follower.style.transform = this.follower.style.transform.replace(
+//         " scale(1.2)",
+//         ""
+//       );
+//     }
+//   }
+// }
 
 // ==========================================================================
 // SISTEMA DE PARTÍCULAS
