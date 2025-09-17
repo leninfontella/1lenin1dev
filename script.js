@@ -546,15 +546,13 @@ class ContactForm {
   async handleSubmit(e) {
     e.preventDefault();
 
-    const formData = new FormData(this.form);
-    const data = {
-      nome: formData.get("nome") || document.getElementById("nome")?.value,
-      email: formData.get("email") || document.getElementById("email")?.value,
-      assunto:
-        formData.get("assunto") || document.getElementById("assunto")?.value,
-      mensagem:
-        formData.get("mensagem") || document.getElementById("mensagem")?.value,
-    };
+    // Obter dados do formulário
+    const nome = document.getElementById("nome")?.value?.trim();
+    const email = document.getElementById("email")?.value?.trim();
+    const assunto = document.getElementById("assunto")?.value?.trim();
+    const mensagem = document.getElementById("mensagem")?.value?.trim();
+
+    const data = { nome, email, assunto, mensagem };
 
     // Validar todos os campos
     let isFormValid = true;
@@ -573,37 +571,114 @@ class ContactForm {
     this.showMessage("Enviando mensagem...", "enviando");
 
     try {
-      const response = await fetch(
+      // Tentar múltiplas URLs do servidor
+      const serverUrls = [
         "https://nodemailer-backend-iweb.onrender.com/enviar-email",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
+        "https://portfolio-api-lenin.herokuapp.com/enviar-email", // URL de backup se necessário
+      ];
+
+      let response = null;
+      let lastError = null;
+
+      for (const url of serverUrls) {
+        try {
+          console.log(`Tentando enviar para: ${url}`);
+
+          response = await fetch(url, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+            body: JSON.stringify(data),
+            mode: "cors",
+            credentials: "omit",
+          });
+
+          if (response.ok) {
+            break; // Se deu certo, sair do loop
+          } else {
+            throw new Error(`Servidor retornou status ${response.status}`);
+          }
+        } catch (error) {
+          console.warn(`Falha ao conectar com ${url}:`, error);
+          lastError = error;
+          continue; // Tentar próxima URL
         }
-      );
+      }
+
+      if (!response || !response.ok) {
+        throw lastError || new Error("Todos os servidores falharam");
+      }
 
       const result = await response.json();
 
-      if (response.ok) {
+      if (result.sucesso) {
         this.showMessage("Mensagem enviada com sucesso! ✅", "sucesso");
         this.form.reset();
         this.clearAllFieldErrors();
+
+        // Analytics - rastrear envio bem-sucedido
+        console.log("📧 Formulário enviado com sucesso");
       } else {
-        throw new Error(result.message || "Erro no servidor");
+        throw new Error(result.mensagem || "Erro desconhecido do servidor");
       }
     } catch (error) {
-      console.error("Erro ao enviar formulário:", error);
-      this.showMessage("Erro ao enviar mensagem. Tente novamente. ❌", "erro");
+      console.error("❌ Erro ao enviar formulário:", error);
+
+      // Diferentes mensagens baseadas no tipo de erro
+      let errorMessage = "Erro ao enviar mensagem. ";
+
+      if (
+        error.message.includes("Failed to fetch") ||
+        error.message.includes("network")
+      ) {
+        errorMessage +=
+          "Verifique sua conexão com a internet e tente novamente.";
+      } else if (error.message.includes("CORS")) {
+        errorMessage +=
+          "Problema de configuração do servidor. Tente novamente em alguns minutos.";
+      } else if (error.message.includes("400")) {
+        errorMessage +=
+          "Dados inválidos. Verifique se todos os campos estão preenchidos corretamente.";
+      } else if (error.message.includes("500")) {
+        errorMessage += "Erro interno do servidor. Tente novamente mais tarde.";
+      } else {
+        errorMessage += "Tente novamente em alguns minutos.";
+      }
+
+      this.showMessage(errorMessage + " ❌", "erro");
+
+      // Fallback - mostrar informações alternativas de contato
+      setTimeout(() => {
+        this.showFallbackContact();
+      }, 3000);
     }
 
-    // Esconder mensagem após 5 segundos
+    // Esconder mensagem após 8 segundos
     setTimeout(() => {
-      if (this.statusDiv) {
+      if (this.statusDiv && !this.statusDiv.classList.contains("escondido")) {
         this.statusDiv.classList.add("escondido");
       }
-    }, 5000);
+    }, 8000);
+  }
+
+  showFallbackContact() {
+    const fallbackMsg = `
+      <div style="margin-top: 15px; padding: 15px; background: rgba(0, 216, 255, 0.1); border-radius: 8px; border: 1px solid rgba(0, 216, 255, 0.3);">
+        <p style="margin: 0; color: var(--primary-color); font-weight: 600;">📱 Contato Alternativo:</p>
+        <p style="margin: 5px 0 0 0; font-size: 14px;">
+          WhatsApp: <a href="https://wa.me/5551989134037" target="_blank" style="color: var(--primary-color);">+55 51 9 8913-4037</a><br>
+          Email: <a href="mailto:lenin.fontella@gmail.com" style="color: var(--primary-color);">lenin.fontella@gmail.com</a>
+        </p>
+      </div>
+    `;
+
+    if (this.statusDiv) {
+      this.statusDiv.innerHTML = fallbackMsg;
+      this.statusDiv.className = "status-mensagem";
+      this.statusDiv.classList.remove("escondido");
+    }
   }
 
   showMessage(text, type) {
